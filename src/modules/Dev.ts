@@ -1,6 +1,7 @@
 import {
   Extension,
   applicationCommand,
+  listener,
   option,
   ownerOnly,
 } from '@pikokr/command.ts'
@@ -13,6 +14,11 @@ import {
 import { basename, join } from 'path'
 
 class Dev extends Extension {
+  @listener({ event: 'applicationCommandInvokeError', emitter: 'cts' })
+  async errorLogger(err: Error) {
+    this.logger.error(err)
+  }
+
   @ownerOnly
   @applicationCommand({
     type: ApplicationCommandType.ChatInput,
