@@ -1,5 +1,5 @@
 import { COLORS } from '../constants'
-import { chunkedFields, database, diff, isIgnored } from '../utils'
+import { chunkedFields, database, diff, isIgnored, toTimestamp } from '../utils'
 import { Extension, listener } from '@pikokr/command.ts'
 import type { GuildMember, Message, TextBasedChannel } from 'discord.js'
 import {
@@ -125,6 +125,14 @@ class Logging extends Extension {
             name: `${member.user.tag} (${member.user.id})`,
             iconURL: member.user.displayAvatarURL(),
           })
+          .addFields(
+            { name: 'User', value: `<@${member.user.id}>`, inline: true },
+            {
+              name: 'Created At',
+              value: `<t:${toTimestamp(member.user.createdAt)}:R>`,
+              inline: true,
+            }
+          )
           .setTimestamp(),
       ],
     })
@@ -158,6 +166,20 @@ class Logging extends Extension {
             name: `${member.user.tag} (${member.user.id})`,
             iconURL: member.user.displayAvatarURL(),
           })
+          .addFields(
+            {
+              name: 'User',
+              value: `<@${member.user.id}>`,
+              inline: true,
+            },
+            {
+              name: 'Joined At',
+              value: member.joinedAt
+                ? `<t:${toTimestamp(member.joinedAt)}:R>`
+                : 'N/A',
+              inline: true,
+            }
+          )
           .setTimestamp(),
       ],
     })
